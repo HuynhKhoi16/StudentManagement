@@ -4,6 +4,10 @@ using System.Text;
 
 namespace StudentManagement.Human
 {
+    enum Gender
+    {
+        Male, Female, Others
+    }
     interface Person
     {
         public string name { get; set; }
