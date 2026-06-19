@@ -4,34 +4,20 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Data.SqlClient;
 using System.Globalization;
+using StudentManagement.DatabaseConnection;
 namespace StudentManagement.Resource
 {
    class StudentService
     {
-        
-        //  CHECK ID IN DATABASE
-        public static bool IdInDatabase(int id)
+        private readonly Database Repository;
+
+        public StudentService(Database repository)
         {
-
-
-            string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=StudentManagement;Integrated Security=True;Encrypt=True;";
-            using (SqlConnection cnn = new SqlConnection(connectionString))
-            {
-                string sql = "Select COUNT(1) from Student " +
-                             "where Id = @Id";
-                using(SqlCommand cmd = new SqlCommand(sql, cnn))
-                {
-                    cmd.Parameters.AddWithValue("@Id", id);
-                    cnn.Open();
-
-                    int count = Convert.ToInt32(cmd.ExecuteScalar());
-                    return count > 0;
-                }
-            }
+            Repository = repository;
         }
 
         //1. ADD STUDENT
-        public static void addStudent()
+        public void addStudent()
         {
             Console.Write("StudentID: ");
             int id;
@@ -41,7 +27,7 @@ namespace StudentManagement.Resource
                 return;
             }
 
-            bool check = IdInDatabase(id);
+            bool check = Repository.IdInDatabase(id);
             if (check == true)
             {
                 Console.Write("ID already exist");
@@ -68,67 +54,18 @@ namespace StudentManagement.Resource
 
             Student student = new Student(id, name, age, gender, major);
 
-            AddToDatabase(student);
+            Repository.AddToDatabase(student);
 
         }
 
 
 
-        //1.1. ADD TO DATABASE
-        public static void AddToDatabase(Student student)
-        {
-            string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=StudentManagement;Integrated Security=True;";
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-                string sql = "Insert into [dbo].[Student](Id, Name, Age, Gender, Major) VALUES (@Id, @Name, @Age, @Gender, @Major)";
-                using (SqlCommand cmd = new SqlCommand(sql, conn))
-                {
-                    cmd.Parameters.AddWithValue("@Id", student.Id);
-                    cmd.Parameters.AddWithValue("@Name", student.name);
-                    cmd.Parameters.AddWithValue("@Age", student.age);
-                    cmd.Parameters.AddWithValue("@Gender", student.gender.ToString());
-                    cmd.Parameters.AddWithValue("@Major", student.major);
-                    conn.Open();
-                    cmd.ExecuteNonQuery();
-                }
-            }
-        }
-
-
-
-        //2. VIEW DATABASE
-        public static void viewDatabase()
-        {
-            Console.WriteLine($"{"Id",-10} {"Name",-25} {"Age",-5} {"Gender",-10} {"Major",-25}");
-            string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=StudentManagement;Integrated Security=True;Encrypt=True;";
-            string sql = "Select * from Student";
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-                using (SqlCommand cmd = new SqlCommand(sql, conn))
-                {
-                    conn.Open();
-
-                    using (SqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            int id = Convert.ToInt32(reader["ID"]);
-                            string name = Convert.ToString(reader["Name"]);
-                            int age = Convert.ToInt32(reader["Age"]);
-                            string gender = Convert.ToString(reader["Gender"]);
-                            string major = Convert.ToString(reader["Major"]);
-                            Console.WriteLine($"{id,-10} {name,-25} {age,-5} {gender,-10} {major,-25}");
-                        }
-                    }
-                }
-            }
-        }
+        
 
 
 
         //3. UPDATE INFORMATION 
-        public static void updateStudent()
+        public void updateStudent()
         {
             int Id0;
             Console.Write("Enter the studentID of the Student you want to modify: ");
@@ -138,7 +75,7 @@ namespace StudentManagement.Resource
                 return;
             }
 
-            if (IdInDatabase(Id0))
+            if (Repository.IdInDatabase(Id0))
             {
                 Console.Write("Enter the new ID: ");
                 int Id;
@@ -148,7 +85,7 @@ namespace StudentManagement.Resource
                     return;
                 }
 
-                bool check = IdInDatabase(Id);
+                bool check = Repository.IdInDatabase(Id);
                 if (check == true && Id != Id0)
                 {
                     Console.Write("ID already exist");
@@ -192,7 +129,7 @@ namespace StudentManagement.Resource
 
                 int oldId = Id0;
                 Student student = new Student(Id, name, age, gender, major);
-                UpdateToDatabase(oldId, student);
+                Repository.UpdateToDatabase(oldId, student);
 
             }
             else
@@ -204,36 +141,11 @@ namespace StudentManagement.Resource
 
 
 
-        //3.1. UPDATE DATABASE
-        public static void UpdateToDatabase(int oldID, Student student)
-        {
-            string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=StudentManagement;Integrated Security=True;";
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-
-                string sql = "Update Student Set Id = @Id,  " +
-                                            "Name = @Name, " +
-                                            "Age = @Age, " +
-                                            "Gender = @Gender, " +
-                                            "Major = @Major " +
-                                            "Where Id = @oldId";
-                using (SqlCommand cmd = new SqlCommand(sql, conn))
-                {
-                    cmd.Parameters.AddWithValue("@Id", student.Id);
-                    cmd.Parameters.AddWithValue("@Name", student.name);
-                    cmd.Parameters.AddWithValue("@Age", student.age);
-                    cmd.Parameters.AddWithValue("@Gender", student.gender.ToString());
-                    cmd.Parameters.AddWithValue("@Major", student.major);
-                    cmd.Parameters.AddWithValue("@oldId", oldID);
-                    conn.Open();
-                    cmd.ExecuteNonQuery();
-                }
-            }
-        }
+        
 
 
         //4. DELETE STUDENT
-        public static void deleteStudent()
+        public void deleteStudent()
         {
             Console.Write("Enter the studentID of the Student you want to delete: ");
             int id;
@@ -241,13 +153,13 @@ namespace StudentManagement.Resource
             {
                 Console.WriteLine("Invalid entry, re-entering:");
             }
-            if (!IdInDatabase(id))
+            if (!Repository.IdInDatabase(id))
             {
                 Console.WriteLine("The ID is not found.");
             }
             else
             {
-                Delete1FromDatabase(id);
+                Repository.Delete1FromDatabase(id);
                 Console.WriteLine($"The student with the ID {id} was removed.");
 
             }
@@ -256,25 +168,11 @@ namespace StudentManagement.Resource
 
         //4.1. DELETE 1 VALUE IN DATABASE
 
-        public static void Delete1FromDatabase(int Id)
-        {
-            string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=StudentManagement;Integrated Security=True;";
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-                string sql = "Delete from Student Where Id = @Id";
-                using (SqlCommand cmd = new SqlCommand(sql, conn))
-                {
-
-                    cmd.Parameters.AddWithValue("@Id", Id);
-                    conn.Open();
-                    cmd.ExecuteNonQuery();
-                }
-            }
-        }
+        
 
 
         //MainHub
-        public static void mainHubStudent()
+        public void mainHubStudent()
         {
             while (true)
             {
@@ -304,7 +202,7 @@ namespace StudentManagement.Resource
                     case 1:
                         addStudent(); break;
                     case 2:
-                        viewDatabase(); break;
+                        Repository.viewDatabase(); break;
                     case 3:
                         updateStudent(); break;
                     case 4:

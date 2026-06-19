@@ -4,7 +4,7 @@ using System.Text;
 
 namespace StudentManagement.Human
 {
-    class Student : Person
+    public class Student : Person
     {
         public int Id { get; set; }
         public string name { get; set; }

@@ -2,7 +2,8 @@
 using StudentManagement.Human;
 using StudentManagement.Resource;
 using StudentManagement.Testing;
-
+using Microsoft.Extensions.DependencyInjection;
+using StudentManagement.DatabaseConnection;
 
 namespace StudentManagement
 {
@@ -10,18 +11,21 @@ namespace StudentManagement
     {
         static void Main(string[] args)
         {
-            try
-            {
-                //List<Student> students = new List<Student> { };
-                //StudentExample.Example1();
+            var services = new ServiceCollection();
 
-                StudentService.mainHubStudent();
-               
-            }
-            finally
-            {
-                //StudentService.TerminateDatabase();
-            }
+            string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=StudentManagement;Integrated Security=True;Encrypt=True;";
+            // 1. Đăng ký các dịch vụ
+             // Giả sử class Database của bạn chứa logic SQL
+            services.AddSingleton<Database>(new Sql(connectionString));
+            services.AddSingleton<StudentService>();
+            // 2. Build
+            var serviceProvider = services.BuildServiceProvider();
+
+            // 3. Lấy StudentService đã được DI chuẩn bị sẵn
+            var app = serviceProvider.GetRequiredService<StudentService>();
+
+            // 4. Chạy ứng dụng
+            app.mainHubStudent();
         }
     }
 }

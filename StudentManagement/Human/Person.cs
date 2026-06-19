@@ -4,7 +4,7 @@ using System.Text;
 
 namespace StudentManagement.Human
 {
-    enum Gender
+    public enum Gender
     {
         Male, Female, Others
     }
