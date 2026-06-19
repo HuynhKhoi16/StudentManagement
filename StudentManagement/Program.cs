@@ -10,10 +10,18 @@ namespace StudentManagement
     {
         static void Main(string[] args)
         {
-            List<Student> students = new List<Student> { };
-            StudentExample.Example1(students);
+            try
+            {
+                //List<Student> students = new List<Student> { };
+                //StudentExample.Example1();
 
-            StudentService.mainHubStudent(students);
+                StudentService.mainHubStudent();
+               
+            }
+            finally
+            {
+                //StudentService.TerminateDatabase();
+            }
         }
     }
 }
