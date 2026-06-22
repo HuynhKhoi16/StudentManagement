@@ -1,10 +1,7 @@
-﻿using StudentManagement.Human;
+﻿
 using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Data.SqlClient;
-using System.Globalization;
 using StudentManagement.DatabaseConnection;
+using StudentManagement.Human;
 namespace StudentManagement.Resource
 {
    class StudentService

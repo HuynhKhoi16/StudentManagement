@@ -11,13 +11,23 @@ namespace StudentManagement
     {
         static void Main(string[] args)
         {
-            var services = new ServiceCollection();
 
             string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=StudentManagement;Integrated Security=True;Encrypt=True;";
+            string databaseName = "Student";
+            
+            Database db = new Sql(connectionString, databaseName);
+            StudentService Service = new StudentService(db);
+            Service.mainHubStudent();
+
+            
+
+            /*
+            var services = new ServiceCollection();
             // 1. Đăng ký các dịch vụ
-             // Giả sử class Database của bạn chứa logic SQL
-            services.AddSingleton<Database>(new Sql(connectionString));
+            // Giả sử class Database của bạn chứa logic SQL
+            services.AddSingleton<Database>(new Sql(connectionString, databaseName));
             services.AddSingleton<StudentService>();
+
             // 2. Build
             var serviceProvider = services.BuildServiceProvider();
 
@@ -26,8 +36,15 @@ namespace StudentManagement
 
             // 4. Chạy ứng dụng
             app.mainHubStudent();
+            */
+
         }
+
+
+
+
     }
+    
 }
 
 

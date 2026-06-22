@@ -9,11 +9,13 @@ namespace StudentManagement.DatabaseConnection
     public class Sql : Database
     {
         private readonly string ConnectionString;
+        private readonly string TableName;
 
 
-        public Sql (string connectionString)
+        public Sql (string connectionString, string tableName)
         {
             ConnectionString = connectionString;
+            TableName = tableName;
         }
 
         //  CHECK ID IN DATABASE
@@ -21,7 +23,7 @@ namespace StudentManagement.DatabaseConnection
         {
             using (SqlConnection cnn = new SqlConnection(ConnectionString))
             {
-                string sql = "Select COUNT(1) from Student " +
+                string sql = $"Select COUNT(1) from {TableName} " +
                              "where Id = @Id";
                 using (SqlCommand cmd = new SqlCommand(sql, cnn))
                 {
@@ -39,7 +41,7 @@ namespace StudentManagement.DatabaseConnection
         {
             using (SqlConnection conn = new SqlConnection(ConnectionString))
             {
-                string sql = "Insert into [dbo].[Student](Id, Name, Age, Gender, Major) VALUES (@Id, @Name, @Age, @Gender, @Major)";
+                string sql = $"Insert into {TableName}(Id, Name, Age, Gender, Major) VALUES (@Id, @Name, @Age, @Gender, @Major)";
                 using (SqlCommand cmd = new SqlCommand(sql, conn))
                 {
                     cmd.Parameters.AddWithValue("@Id", student.Id);
@@ -57,7 +59,7 @@ namespace StudentManagement.DatabaseConnection
         public void viewDatabase()
         {
             Console.WriteLine($"{"Id",-10} {"Name",-25} {"Age",-5} {"Gender",-10} {"Major",-25}");
-            string sql = "Select * from Student";
+            string sql = $"Select * from {TableName}";
 
             using (SqlConnection conn = new SqlConnection(ConnectionString))
             {
@@ -88,7 +90,7 @@ namespace StudentManagement.DatabaseConnection
             using (SqlConnection conn = new SqlConnection(ConnectionString))
             {
 
-                string sql = "Update Student Set Id = @Id,  " +
+                string sql = $"Update {TableName} Set Id = @Id,  " +
                                             "Name = @Name, " +
                                             "Age = @Age, " +
                                             "Gender = @Gender, " +
@@ -113,7 +115,7 @@ namespace StudentManagement.DatabaseConnection
         {
             using (SqlConnection conn = new SqlConnection(ConnectionString))
             {
-                string sql = "Delete from Student Where Id = @Id";
+                string sql = $"Delete from {TableName} Where Id = @Id";
                 using (SqlCommand cmd = new SqlCommand(sql, conn))
                 {
 
