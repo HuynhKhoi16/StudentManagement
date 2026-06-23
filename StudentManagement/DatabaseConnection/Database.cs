@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using StudentManagement.Human;
+using StudentManagement.Model;
 
 namespace StudentManagement.DatabaseConnection
 {
-    public interface Database
+    public interface IDatabase
     {
         void AddToDatabase(Student student);
         void viewDatabase();

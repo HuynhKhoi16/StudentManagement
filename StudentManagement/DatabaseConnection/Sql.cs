@@ -1,4 +1,4 @@
-﻿using StudentManagement.Human;
+﻿using StudentManagement.Model;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -6,7 +6,7 @@ using Microsoft.Data.SqlClient;
 
 namespace StudentManagement.DatabaseConnection
 {
-    public class Sql : Database
+    public class Sql : IDatabase
     {
         private readonly string ConnectionString;
         private readonly string TableName;

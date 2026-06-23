@@ -1,14 +1,14 @@
 ﻿
 using System;
 using StudentManagement.DatabaseConnection;
-using StudentManagement.Human;
-namespace StudentManagement.Resource
+using StudentManagement.Model;
+namespace StudentManagement.Service
 {
-    public class StudentService
+    public class StudentService : IStudentRepository
     {
-        private readonly Database Repository;
+        private readonly IDatabase Repository;
 
-        public StudentService(Database repository)
+        public StudentService(IDatabase repository)
         {
             Repository = repository;
         }

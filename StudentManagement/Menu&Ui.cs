@@ -1,5 +1,5 @@
-﻿using StudentManagement.Human;
-using StudentManagement.Resource;
+﻿using StudentManagement.Model;
+using StudentManagement.Service;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,9 +8,9 @@ namespace StudentManagement
 {
     public class Menu_UI
     {
-        private readonly StudentService studentService;
+        private readonly IStudentRepository studentService;
 
-        public Menu_UI(StudentService studentService)
+        public Menu_UI(IStudentRepository studentService)
         {
             this.studentService = studentService;
         }
