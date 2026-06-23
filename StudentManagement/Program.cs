@@ -38,7 +38,6 @@ namespace StudentManagement
             // 4. Chạy ứng dụng
             app.mainHubStudent();
             */
-
         }
     }
 }
