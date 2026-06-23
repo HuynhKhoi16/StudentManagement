@@ -13,13 +13,14 @@ namespace StudentManagement
         {
 
             string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=StudentManagement;Integrated Security=True;Encrypt=True;";
-            string databaseName = "Student";
-            
-            Database db = new Sql(connectionString, databaseName);
-            StudentService Service = new StudentService(db);
-            Service.mainHubStudent();
+            string tableName = "Student";
 
-            
+            Database db = new Sql(connectionString, tableName);
+            StudentService Service = new StudentService(db);
+            Menu_UI Front = new Menu_UI(Service);
+            Front.mainHubStudent();
+
+
 
             /*
             var services = new ServiceCollection();
@@ -39,12 +40,7 @@ namespace StudentManagement
             */
 
         }
-
-
-
-
     }
-    
 }
 
 

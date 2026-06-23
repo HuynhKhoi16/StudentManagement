@@ -1,8 +1,8 @@
-﻿using Microsoft.Data.SqlClient;
-using StudentManagement.Human;
+﻿using StudentManagement.Human;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Data.SqlClient;
 
 namespace StudentManagement.DatabaseConnection
 {
@@ -12,7 +12,7 @@ namespace StudentManagement.DatabaseConnection
         private readonly string TableName;
 
 
-        public Sql (string connectionString, string tableName)
+        public Sql(string connectionString, string tableName)
         {
             ConnectionString = connectionString;
             TableName = tableName;
@@ -52,7 +52,9 @@ namespace StudentManagement.DatabaseConnection
                     conn.Open();
                     cmd.ExecuteNonQuery();
                 }
+
             }
+            Console.WriteLine($"The student with the Id {student.Id} is just added to the database");
         }
 
         //2. VIEW DATABASE
@@ -108,6 +110,7 @@ namespace StudentManagement.DatabaseConnection
                     cmd.ExecuteNonQuery();
                 }
             }
+            Console.WriteLine($"The student with the Id {student.Id} is just added to the database");
         }
 
 
@@ -124,6 +127,7 @@ namespace StudentManagement.DatabaseConnection
                     cmd.ExecuteNonQuery();
                 }
             }
+            Console.WriteLine("The student with the id ${Id} is removed from the database");
         }
     }
 }
