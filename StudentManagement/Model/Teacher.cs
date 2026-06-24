@@ -11,6 +11,7 @@ namespace StudentManagement.Model
         public int age { get; set; }
         public Gender gender { get; set; }
         public string major { get; set; }
+        public string Qualification {  get; set; }
 
         public Teacher(int id, string name, int age, string gender, string major)
         {

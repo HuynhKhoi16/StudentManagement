@@ -5,11 +5,11 @@ using StudentManagement.Model;
 
 namespace StudentManagement.DatabaseConnection
 {
-    public interface IDatabase
+    public interface IDatabase <T> where T : class
     {
-        void AddToDatabase(Student student);
+        void AddToDatabase(T entity);
         void viewDatabase();
-        void UpdateToDatabase(int oldID, Student student);
+        void UpdateToDatabase(int oldID, T entity);
         void Delete1FromDatabase(int Id);
         bool IdInDatabase(int id);
     }

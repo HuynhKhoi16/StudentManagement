@@ -6,22 +6,24 @@ namespace StudentManagement.Service
 {
     public class StudentService : IStudentRepository
     {
-        private readonly IDatabase Repository;
+        private readonly IDatabase<Student> Repository;
 
-        public StudentService(IDatabase repository)
+        public StudentService(IDatabase<Student> repository)
         {
             Repository = repository;
         }
 
+
+        //CHECK ID
+        public bool Idcheck(int id)
+        {
+            return Repository.IdInDatabase(id);
+        }
+
         //1. ADD STUDENT
         public void Add(Student student)
-        {
-            bool check = Repository.IdInDatabase(student.Id);
-            if (check == true)
-            {
-                Console.Write("ID already exist");
-                return;
-            }
+        { 
+            
             Repository.AddToDatabase(student);
 
         }

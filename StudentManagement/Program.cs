@@ -25,7 +25,7 @@ namespace StudentManagement
             var services = new ServiceCollection();
             // 1. Đăng ký các dịch vụ
             // Giả sử class Database của bạn chứa logic SQL
-            services.AddSingleton<IDatabase>(new Sql(connectionString, tableName));
+            services.AddSingleton<IDatabase<Student>>(new Sql(connectionString, tableName));
             services.AddSingleton<IStudentRepository, StudentService>();
             services.AddSingleton<Menu_UI>();
 

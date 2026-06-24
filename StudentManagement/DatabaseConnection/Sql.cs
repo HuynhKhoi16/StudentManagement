@@ -6,7 +6,7 @@ using Microsoft.Data.SqlClient;
 
 namespace StudentManagement.DatabaseConnection
 {
-    public class Sql : IDatabase
+    public class Sql : IDatabase<Student>
     {
         private readonly string ConnectionString;
         private readonly string TableName;

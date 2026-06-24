@@ -8,6 +8,7 @@ namespace StudentManagement.Service
 {
     public interface IStudentRepository
     {
+        bool Idcheck(int id);
         void Add(Student student);
         void View();
         void Update(Student student, int oldId);

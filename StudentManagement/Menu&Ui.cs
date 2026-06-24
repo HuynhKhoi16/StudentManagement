@@ -16,6 +16,12 @@ namespace StudentManagement
         }
 
 
+        //CHECK EXISTING ID
+        public bool IdExist(int id)
+        {
+            return studentService.Idcheck(id);
+        }
+
 
 
         //MainHub
@@ -41,6 +47,7 @@ namespace StudentManagement
                 if (!int.TryParse(Console.ReadLine(), out num))
                 {
                     Console.WriteLine("Invalid entry, must be a number.");
+                    return;
                 }
 
 
@@ -56,10 +63,16 @@ namespace StudentManagement
                             if (!int.TryParse(Console.ReadLine(), out id))
                             {
                                 Console.Write("Invalid entry");
-                                return;
+                                break;
                             }
 
-                            Console.Write("Fullname: ");
+                            if (IdExist(id))
+                            {
+                                Console.Write("The id you entered already exists");
+                                break; ;
+                            }
+
+                        Console.Write("Fullname: ");
                             string name = Console.ReadLine();
 
                             Console.Write("Age: ");
@@ -102,7 +115,14 @@ namespace StudentManagement
                             if (!int.TryParse(Console.ReadLine(), out Id0))
                             {
                                 Console.Write("Invalid entry");
-                                return;
+                                break ;
+                            }
+
+
+                            if (!IdExist(Id0))
+                            {
+                                Console.Write("The id you entered cannot be found");
+                                break; ;
                             }
 
                             Console.Write("Enter the new ID: ");
@@ -112,6 +132,13 @@ namespace StudentManagement
                                 Console.Write("Invalid entry");
                                 return;
                             }
+
+                            if (IdExist(Id0) && Id0 != Id)
+                            {
+                                Console.Write("The id you entered already exists");
+                                break; ;
+                            }
+
 
 
                             Console.Write("Enter the new name: ");
@@ -165,6 +192,12 @@ namespace StudentManagement
                             while (!int.TryParse(Console.ReadLine(), out id))
                             {
                                 Console.WriteLine("Invalid entry, re-entering:");
+                            }
+
+                            if (!IdExist(id))
+                            {
+                                Console.Write("The id you try to delete does not exist");
+                                break; ;
                             }
 
                             studentService.Delete(id); break;
