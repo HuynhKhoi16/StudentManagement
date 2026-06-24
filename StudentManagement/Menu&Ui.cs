@@ -124,7 +124,7 @@ namespace StudentManagement
 
 
                     default:
-                        Console.WriteLine("Out of range number, must be between 1 and 5.");
+                        Console.WriteLine("\nOut of range number, must be between 1 and 5.\n");
                         break;
 
                 }
