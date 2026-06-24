@@ -2,7 +2,9 @@
 using StudentManagement.Service;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
+using System.Xml.Linq;
 
 namespace StudentManagement
 {
@@ -61,7 +63,14 @@ namespace StudentManagement
 
 
                     case 2:
-                        studentService.View(); break;
+                        Console.WriteLine($"{"Id",-10} {"Name",-25} {"Age",-5} {"Gender",-10} {"Major",-25}");
+                        List<Student> students = studentService.View();
+
+                        foreach(var student in students)
+                        {
+                            Console.WriteLine($"{student.Id,-10} {student.name,-25} {student.age,-5} {student.gender,-10} {student.major,-25}");
+                        }
+                        break;
 
 
                     case 3:
@@ -81,11 +90,11 @@ namespace StudentManagement
 
                             studentService.Update(new Student(Id, name, age, gender, major), Id0);
 
-                                if (Id0 != Id)
-                                {
-                                    Console.WriteLine($"The student with the id {Id} is modified in the database");
-                                }
-                                else Console.WriteLine($"The student with the new id {Id} is modified in the database");
+                            if (Id0 != Id)
+                            {
+                                Console.WriteLine($"The student with the id {Id} is modified in the database");
+                            }
+                            else Console.WriteLine($"The student with the new id {Id} is modified in the database");
 
                             }
                         catch (Exception ex){

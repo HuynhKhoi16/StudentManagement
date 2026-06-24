@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Data.SqlClient;
+using StudentManagement.Service;
 
 namespace StudentManagement.DatabaseConnection
 {
@@ -58,9 +59,9 @@ namespace StudentManagement.DatabaseConnection
         }
 
         //2. VIEW DATABASE
-        public void viewDatabase()
+        public List<Student> viewDatabase()
         {
-            Console.WriteLine($"{"Id",-10} {"Name",-25} {"Age",-5} {"Gender",-10} {"Major",-25}");
+            List<Student> students = new List<Student>();
             string sql = $"Select * from {TableName}";
 
             using (SqlConnection conn = new SqlConnection(ConnectionString))
@@ -78,11 +79,12 @@ namespace StudentManagement.DatabaseConnection
                             int age = Convert.ToInt32(reader["Age"]);
                             string gender = Convert.ToString(reader["Gender"]);
                             string major = Convert.ToString(reader["Major"]);
-                            Console.WriteLine($"{id,-10} {name,-25} {age,-5} {gender,-10} {major,-25}");
+                            students.Add(new Student(id, name, age, gender, major));
                         }
                     }
                 }
             }
+            return students;
         }
 
 

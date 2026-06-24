@@ -27,9 +27,9 @@ namespace StudentManagement.Service
 
 
         //2.VIEW ALL
-        public void View()
+        public List<Student> View()
         {
-            Repository.viewDatabase();
+            return Repository.viewDatabase();
         }
 
 

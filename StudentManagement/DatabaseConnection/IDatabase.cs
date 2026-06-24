@@ -8,7 +8,7 @@ namespace StudentManagement.DatabaseConnection
     public interface IDatabase <T> where T : class
     {
         void AddToDatabase(T entity);
-        void viewDatabase();
+        List<T> viewDatabase();
         void UpdateToDatabase(int oldID, T entity);
         void Delete1FromDatabase(int Id);
         bool IdInDatabase(int id);

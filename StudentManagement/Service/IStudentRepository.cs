@@ -9,7 +9,7 @@ namespace StudentManagement.Service
     public interface IStudentRepository
     {
         void Add(Student student);
-        void View();
+        List<Student> View();
         void Update(Student student, int oldId);
         void Delete(int id);
 
