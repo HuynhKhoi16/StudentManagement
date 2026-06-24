@@ -16,14 +16,6 @@ namespace StudentManagement
         }
 
 
-        //CHECK EXISTING ID
-        public bool IdExist(int id)
-        {
-            return studentService.Idcheck(id);
-        }
-
-
-
         //MainHub
         public void mainHubStudent()
         {
@@ -37,67 +29,34 @@ namespace StudentManagement
                 Console.WriteLine("4. Delete Student");
                 Console.WriteLine("5. Exit");
 
-                Console.Write("Choose the number to proceed: ");
 
-
-
-
-                int num;
-
-                if (!int.TryParse(Console.ReadLine(), out num))
-                {
-                    Console.WriteLine("Invalid entry, must be a number.");
-                    return;
-                }
-
+                int num = InputHelper.GetInt("Choose the number to proceed: ");
 
                 switch (num)
                 {
-
-
-
                     case 1:
+                    {
+                        try{
+                            int id = InputHelper.GetInt("Enter new Student Id: ");
+
+                            string name = InputHelper.GetString("The new Strudent name is: ");
+
+                            int age = InputHelper.GetInt("Age: ");
+
+                            string gender = InputHelper.GenderCheck("Gender (Male, Female, Others): ");
+
+                            string major = InputHelper.GetString("Major: ");
+
+                            studentService.Add(new Student(id, name, age, gender, major));
+                            Console.WriteLine($"The student with the Id {id} is just added to the database");
+                            }
+                        catch (Exception ex)
                         {
-                            Console.Write("StudentID: ");
-                            int id;
-                            if (!int.TryParse(Console.ReadLine(), out id))
-                            {
-                                Console.Write("Invalid entry");
-                                break;
-                            }
-
-                            if (IdExist(id))
-                            {
-                                Console.Write("The id you entered already exists");
-                                break; ;
-                            }
-
-                        Console.Write("Fullname: ");
-                            string name = Console.ReadLine();
-
-                            Console.Write("Age: ");
-                            int age;
-
-                            if (!int.TryParse((string)Console.ReadLine(), out age) || age < 0)
-                            {
-                                Console.Write("Invalid age");
-                                return;
-                            }
-
-                            Console.Write("Gender: ");
-                            string gender = Console.ReadLine();
-
-                            Console.Write("Major: ");
-                            string major = Console.ReadLine();
-
-                            Student student = new Student(id, name, age, gender, major);
-
-                            studentService.Add(student);
-                            break;
+                            Console.WriteLine($"\nError: {ex.Message}");
                         }
-
-
-
+                        break;
+                    }
+                        
 
 
 
@@ -105,108 +64,56 @@ namespace StudentManagement
                         studentService.View(); break;
 
 
-
-
-
                     case 3:
-                        {
-                            int Id0;
-                            Console.Write("Enter the studentID of the Student you want to modify: ");
-                            if (!int.TryParse(Console.ReadLine(), out Id0))
-                            {
-                                Console.Write("Invalid entry");
-                                break ;
+                    {
+                        try {                            
+                            int Id0 = InputHelper.GetInt("Enter the Student Id you want to modify: "); ;
+
+                            int Id = InputHelper.GetInt("Enter the new Id: ");
+
+                            string name = InputHelper.GetString("Enter the new name: ");
+
+                            int age = InputHelper.GetInt("Enter the new age: ");
+
+                            string gender = InputHelper.GenderCheck("Enter the gender: ");
+
+                            string major = InputHelper.GetString("Enter the new major: ");
+
+                            studentService.Update(new Student(Id, name, age, gender, major), Id0);
+
+                                if (Id0 != Id)
+                                {
+                                    Console.WriteLine($"The student with the id {Id} is modified in the database");
+                                }
+                                else Console.WriteLine($"The student with the new id {Id} is modified in the database");
+
                             }
-
-
-                            if (!IdExist(Id0))
-                            {
-                                Console.Write("The id you entered cannot be found");
-                                break; ;
-                            }
-
-                            Console.Write("Enter the new ID: ");
-                            int Id;
-                            if (!int.TryParse(Console.ReadLine(), out Id))
-                            {
-                                Console.Write("Invalid entry");
-                                return;
-                            }
-
-                            if (IdExist(Id0) && Id0 != Id)
-                            {
-                                Console.Write("The id you entered already exists");
-                                break; ;
-                            }
-
-
-
-                            Console.Write("Enter the new name: ");
-                            string name = Console.ReadLine();
-
-                            Console.Write("Enter the new age: ");
-
-                            int age;
-
-                            if (!int.TryParse((string)Console.ReadLine(), out age) || age < 0)
-                            {
-                                Console.Write("Invalid age");
-                                return;
-                            }
-
-
-
-                            Console.Write("Reenter the Gender: ");
-                            string gender = Console.ReadLine().ToUpper();
-                            Gender Gender;
-                            switch (gender)
-                            {
-                                case "MALE":
-                                    Gender = Gender.Male; break;
-                                case "FEMALE":
-                                    Gender = Gender.Female; break;
-                                case "OTHERS":
-                                    Gender = Gender.Others; break;
-                                default:
-                                    Console.WriteLine("Invalid gender");
-                                    return;
-                            }
-
-                            Console.Write("Enter the new major: ");
-                            string major = Console.ReadLine();
-
-
-                            int oldId = Id0;
-                            Student student = new Student(Id, name, age, gender, major);
-
-                            studentService.Update(student, oldId);
-                            break;
+                        catch (Exception ex){
+                            Console.WriteLine($"\nError: {ex.Message}");
                         }
-
+                        break;
+                    }
 
 
                     case 4:
+                    {
+                        try{
+                            int id = InputHelper.GetInt("Enter the Id of the student you want to delete: ");
+
+                            studentService.Delete(id);
+                            Console.WriteLine($"The student with the id {id} is removed from the database");
+                            }
+                        catch(Exception ex)
                         {
-                            Console.Write("Enter the studentID of the Student you want to delete: ");
-                            int id;
-                            while (!int.TryParse(Console.ReadLine(), out id))
-                            {
-                                Console.WriteLine("Invalid entry, re-entering:");
+                                Console.WriteLine($"Error: {ex.Message}");
                             }
-
-                            if (!IdExist(id))
-                            {
-                                Console.Write("The id you try to delete does not exist");
-                                break; ;
-                            }
-
-                            studentService.Delete(id); break;
-                        }
-
-
+                            break;
+                    }
 
                     case 5:
                         return;
+
+
                     default:
                         Console.WriteLine("Out of range number, must be between 1 and 5.");
                         break;
@@ -214,6 +121,5 @@ namespace StudentManagement
                 }
             }
         }
-
     }
 }

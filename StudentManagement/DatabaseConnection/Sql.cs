@@ -110,7 +110,7 @@ namespace StudentManagement.DatabaseConnection
                     cmd.ExecuteNonQuery();
                 }
             }
-            Console.WriteLine($"The student with the Id {student.Id} is just added to the database");
+
         }
 
 
@@ -127,7 +127,7 @@ namespace StudentManagement.DatabaseConnection
                     cmd.ExecuteNonQuery();
                 }
             }
-            Console.WriteLine("The student with the id ${Id} is removed from the database");
+
         }
     }
 }

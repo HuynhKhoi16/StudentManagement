@@ -14,16 +14,13 @@ namespace StudentManagement.Service
         }
 
 
-        //CHECK ID
-        public bool Idcheck(int id)
-        {
-            return Repository.IdInDatabase(id);
-        }
-
         //1. ADD STUDENT
         public void Add(Student student)
-        { 
-            
+        {
+            if (Repository.IdInDatabase(student.Id))
+            {
+                throw new Exception("The Id you enter already exist.");
+            }
             Repository.AddToDatabase(student);
 
         }
@@ -40,46 +37,29 @@ namespace StudentManagement.Service
         //3. UPDATE INFORMATION 
         public void Update(Student student, int oldId)
         {
-
-
             if (!Repository.IdInDatabase(oldId))
             {
-                Console.Write("ID not found");
-                return;
+                throw new Exception("The Id of Student you want to change does not exist.");
             }
-
 
             if (Repository.IdInDatabase(student.Id) && student.Id != oldId)
             {
-                Console.Write("The ID you entered already exist");
-                return;
+                throw new Exception("The new Id you enter already exist in the database.");
             }
 
-
             Repository.UpdateToDatabase(oldId, student);
-
-
         }
-
-
-
 
 
 
         //4. DELETE STUDENT
         public void Delete(int id)
         {
-
             if (!Repository.IdInDatabase(id))
             {
-                Console.WriteLine("The ID is not found.");
+                throw new Exception("The Id of Student you want to change does not exist.");
             }
-            else
-            {
-                Repository.Delete1FromDatabase(id);
-                Console.WriteLine($"The student with the ID {id} was removed.");
-
-            }
+            Repository.Delete1FromDatabase(id);
         }
     }
 }
