@@ -6,7 +6,7 @@ using StudentManagement.DatabaseConnection;
 
 namespace StudentManagement
 {
-    class program
+    class Program
     {
         static void Main(string[] args)
         {
