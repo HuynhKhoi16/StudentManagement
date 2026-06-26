@@ -9,10 +9,10 @@ namespace StudentManagement.DatabaseConnection
 {
     public class Sql : IDatabase<Student>
     {
-        private readonly string ConnectionString;
-        private readonly string TableName;
+        public string ConnectionString { get; set; }
+        public string TableName { get; set; }
 
-
+        public Sql() { }
         public Sql(string connectionString, string tableName)
         {
             ConnectionString = connectionString;

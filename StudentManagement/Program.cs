@@ -3,6 +3,9 @@ using StudentManagement.Model;
 using StudentManagement.Service;
 using Microsoft.Extensions.DependencyInjection;
 using StudentManagement.DatabaseConnection;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.Json;
+using Microsoft.Extensions.Options;
 
 namespace StudentManagement
 {
@@ -10,9 +13,9 @@ namespace StudentManagement
     {
         static void Main(string[] args)
         {
-            
-            string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=StudentManagement;Integrated Security=True;Encrypt=True;";
-            string tableName = "Student";
+
+            //string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=StudentManagement;Integrated Security=True;Encrypt=True;";
+            //string tableName = "Student";
             /*
             IDatabase db = new Sql(connectionString, tableName);
             IStudentRepository Service = new StudentService(db);
@@ -20,24 +23,26 @@ namespace StudentManagement
             Front.mainHubStudent();
             */
 
+            IConfiguration configuration = new ConfigurationBuilder()
+    .SetBasePath(Directory.GetCurrentDirectory()) // Đặt đường dẫn làm việc tại thư mục chứa file
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .Build();
 
-            
+
             var services = new ServiceCollection();
-            // 1. Đăng ký các dịch vụ
-            // Giả sử class Database của bạn chứa logic SQL
-            services.AddSingleton<IDatabase<Student>>(new Sql(connectionString, tableName));
+            services.Configure<Sql>(configuration.GetSection("DatabaseInformation"));
+
+            services.AddSingleton<IDatabase<Student>, Sql>();
             services.AddSingleton<IStudentRepository, StudentService>();
             services.AddSingleton<Menu_UI>();
 
-            // 2. Build
             var serviceProvider = services.BuildServiceProvider();
+            // 1. Lấy "thành phẩm" Menu_UI ra từ container
+            var menu = serviceProvider.GetRequiredService<Menu_UI>();
 
-            // 3. Lấy StudentService đã được DI chuẩn bị sẵn
-            var app = serviceProvider.GetRequiredService<Menu_UI>();
+            // 2. Bây giờ mới gọi hàm mainHubStudent() của đối tượng đó
+            menu.mainHubStudent();
 
-            // 4. Chạy ứng dụng
-            app.mainHubStudent();
-            
         }
     }
 }
