@@ -2,7 +2,6 @@
 using StudentManagement.Model;
 using StudentManagement.Service;
 using Microsoft.Extensions.DependencyInjection;
-using StudentManagement.DatabaseConnection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.Options;
