@@ -10,9 +10,9 @@ namespace StudentManagement
 {
     public class Menu_UI
     {
-        private readonly IStudentRepository studentService;
+        private readonly StudentService studentService;
 
-        public Menu_UI(IStudentRepository studentService)
+        public Menu_UI(StudentService studentService)
         {
             this.studentService = studentService;
         }
@@ -41,7 +41,7 @@ namespace StudentManagement
                         try{
                             int id = InputHelper.GetInt("Enter new Student Id: ");
 
-                            string name = InputHelper.GetString("The new Strudent name is: ");
+                            string name = InputHelper.GetString("The new Student name is: ");
 
                             int age = InputHelper.GetInt("Age: ");
 
@@ -49,7 +49,7 @@ namespace StudentManagement
 
                             string major = InputHelper.GetString("Major: ");
 
-                            studentService.Add(new Student(id, name, age, gender, major));
+                            studentService.AddToDatabase(new Student(id, name, age, gender, major));
                             Console.WriteLine($"The student with the Id {id} is just added to the database");
                             }
                         catch (Exception ex)
@@ -64,7 +64,7 @@ namespace StudentManagement
 
                     case 2:
                         Console.WriteLine($"{"Id",-10} {"Name",-25} {"Age",-5} {"Gender",-10} {"Major",-25}");
-                        List<Student> students = studentService.View();
+                        List<Student> students = studentService.ViewAll();
 
                         foreach(var student in students)
                         {
@@ -88,7 +88,7 @@ namespace StudentManagement
 
                             string major = InputHelper.GetString("Enter the new major: ");
 
-                            studentService.Update(new Student(Id, name, age, gender, major), Id0);
+                            studentService.UpdateToDatabase(new Student(Id, name, age, gender, major), Id0);
 
                             if (Id0 != Id)
                             {
@@ -109,7 +109,7 @@ namespace StudentManagement
                         try{
                             int id = InputHelper.GetInt("Enter the Id of the student you want to delete: ");
 
-                            studentService.Delete(id);
+                            studentService.DeleteFromDatabase(id);
                             Console.WriteLine($"The student with the id {id} is removed from the database");
                             }
                         catch(Exception ex)

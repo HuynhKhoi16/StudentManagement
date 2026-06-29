@@ -9,7 +9,7 @@ namespace StudentManagement.Model
         public int Id { get; set; }
         public string name { get; set; }
         public int age { get; set; }
-        public Gender gender { get; set; }
+        public string gender { get; set; }
         public string major { get; set; }
         public string Qualification {  get; set; }
 
@@ -24,11 +24,11 @@ namespace StudentManagement.Model
             switch (gender)
             {
                 case "MALE":
-                    this.gender = Gender.Male; break;
+                    this.gender = "Male"; break;
                 case "FEMALE":
-                    this.gender = Gender.Female; break;
+                    this.gender = "Female"; break;
                 case "OTHERS":
-                    this.gender = Gender.Others; break;
+                    this.gender = "Others"; break;
                 default:
                     //throw new ArgumentException("There is an gender error here.");
                     return;

@@ -1,65 +1,80 @@
 ﻿
 using System;
-using StudentManagement.DatabaseConnection;
 using StudentManagement.Model;
 namespace StudentManagement.Service
 {
-    public class StudentService : IStudentRepository
+    public class StudentService
     {
-        private readonly IDatabase<Student> Repository;
-
-        public StudentService(IDatabase<Student> repository)
-        {
-            Repository = repository;
-        }
 
 
         //1. ADD STUDENT
-        public void Add(Student student)
+        public void AddToDatabase(Student student)
         {
-            if (Repository.IdInDatabase(student.Id))
+            using (var db = new AppDbContext())
             {
-                throw new Exception("The Id you enter already exist.");
-            }
-            Repository.AddToDatabase(student);
+                db.Students.Add(student);
 
+                db.SaveChanges();
+            }
         }
 
 
         //2.VIEW ALL
-        public List<Student> View()
+        public List<Student> ViewAll()
         {
-            return Repository.viewDatabase();
+            using (var db = new AppDbContext())
+            {
+                return db.Students.ToList();
+            }
+
         }
 
 
 
-        //3. UPDATE INFORMATION 
-        public void Update(Student student, int oldId)
+        //UPDATE
+        public void UpdateToDatabase(Student updatedStudent, int oldId)
         {
-            if (!Repository.IdInDatabase(oldId))
+            using (var db = new AppDbContext())
             {
-                throw new Exception("The Id of Student you want to change does not exist.");
-            }
+                var studentFix = db.Students.FirstOrDefault(s => s.Id == oldId);
+                if (studentFix != null)
+                {
+                    db.Entry(studentFix).CurrentValues.SetValues(updatedStudent);
 
-            if (Repository.IdInDatabase(student.Id) && student.Id != oldId)
-            {
-                throw new Exception("The new Id you enter already exist in the database.");
-            }
+                    // Nếu bạn không muốn đổi Id, hãy ép nó giữ nguyên Id cũ
+                    studentFix.Id = oldId;
 
-            Repository.UpdateToDatabase(oldId, student);
+                    db.SaveChanges();
+                }
+                else throw new Exception("The id is not found");
+            }
         }
 
 
-
-        //4. DELETE STUDENT
-        public void Delete(int id)
+        //DELETE
+        public void DeleteFromDatabase(int id)
         {
-            if (!Repository.IdInDatabase(id))
+            using (var db = new AppDbContext())
             {
-                throw new Exception("The Id of Student you want to change does not exist.");
+
+                // 1. Tìm bản ghi cần xóa
+                var studentToDelete = db.Students.FirstOrDefault(s => s.Id == id);
+
+                if (studentToDelete != null)
+                {
+                    // 2. Gọi lệnh Remove
+                    db.Students.Remove(studentToDelete);
+
+                    // 3. Gọi SaveChanges để thực hiện xóa thật sự trong DB
+                    db.SaveChanges();
+                }
+                else
+                {
+                    throw new Exception("The id is not found!");
+                }
+
+
             }
-            Repository.Delete1FromDatabase(id);
         }
     }
 }
